@@ -75,13 +75,29 @@ app.post('/register-and-broadcast-node',function(req,res){
 
 // register a node with the network
 app.post('/register-node',function(req,res){
+    const newNodeUrl = req.body.newNodeUrl;
+    const nodeNotAlreadyPresent=coin.networkNodes.indexOf(newNodeUrl)==-1
+    const notCurrentNode = coin.currentNodeUrl !== newNodeUrl;
+    if(nodeNotAlreadyPresent && notCurrentNode) coin.networkNodes.push(newNodeUrl);
+    res.json({
+        note: "New node register successfully with node."
+    });
     
 });
 
-// register multiple nodes at once 
+// register multiple nodes at once ，send all of the node 
+// that are already present in the network to the new node
 app.post('/register-nodes-bulk',function(req,res){
-    
-});
+    const allNetworkNodes = req.body.allNetworkNodes;
+    allNetworkNodes.forEach(networkNodeUrl =>{
+        const nodeNotAlreadyPresent = coin.networkNodes.indexOf(networkNodeUrl) == -1;
+        const notCurrentNode = coin.currentNodeUrl !== networkNodeUrl;
+        if(nodeNotAlreadyPresent&&notCurrentNode) coin.networkNodes.push(networkNodeUrl);
+    });
+    res.json({
+        note: "Bulk registration successful."
+    });
+}); 
 
 app.listen(port, function(){
     console.log(`Listening on port ${port}...`);
