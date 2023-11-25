@@ -39,9 +39,7 @@ Blockchain.prototype.createNewTranscation = function(amount,sender,recipient){
         transacionId: uuidv4().split('-').join('')    
     };
     
-    this.pendingTransactions.push(newTransaction);
-    
-    return this.getLastBlock()['index']+1;   //this.getLastBlock()=>get the block , ['index'] means the block data "index"
+    return newTransaction;  
 }
 
 Blockchain.prototype.addTransactionToPendingTransations = function(transactionObj){
@@ -70,9 +68,6 @@ Blockchain.prototype.proofOfWork = function(previousBlockHash, currentBlockData)
     return nonce;
 }
 
-Blockchain.prototype.generateStealthAddress = function(){
-   
-}
 
 
 module.exports = Blockchain;

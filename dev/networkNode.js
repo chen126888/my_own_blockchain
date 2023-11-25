@@ -19,8 +19,9 @@ app.get('/blockchain', function (req, res) {
 });
 
 app.post('/transaction', function (req, res) {
-    const blockIndex = coin.createNewTranscation(req.body.amount,req.body.sender,req.body.recipient);
-    res.json({note: "Transaction will be add in block " +blockIndex+ ".",});
+    const newTransaction = req.body;
+    const blockIndex=coin.addTransactionToPendingTransations(newTransaction);
+    res.json({note: `Transaction wil be added in block ${blockIndex}.`})
 });
 
 app.post('/transaction/broadcast', function(req,res){
@@ -39,7 +40,7 @@ app.post('/transaction/broadcast', function(req,res){
     });
     Promise.all(requestPromises)
     .then(data => {
-        res.json({note: ' Transaction created and broadcast successfully.'})
+        res.json({note: 'Transaction created and broadcast successfully.'})
     });
 });
 
