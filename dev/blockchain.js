@@ -50,6 +50,7 @@ Blockchain.prototype.hashBlock = function(previousBlockHash,currentBlockData,non
 }
 
 Blockchain.prototype.proofOfWork = function(previousBlockHash, currentBlockData){
+    //true way of pof
     //correct hash start with 0000
     //continue changes nonce value until it finds the correct hash
     /*let nonce = 0;
@@ -58,6 +59,7 @@ Blockchain.prototype.proofOfWork = function(previousBlockHash, currentBlockData)
         nonce++;
         hash = this.hashBlock(previousBlockHash, currentBlockData, nonce);
     }*/
+    //for testing, an alternative way to produce none
     let nonce = Math.floor(Math.random()*10000000000);
     return nonce;
 }
