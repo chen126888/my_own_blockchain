@@ -23,6 +23,26 @@ app.post('/transaction', function (req, res) {
     res.json({note: "Transaction will be add in block " +blockIndex+ ".",});
 });
 
+app.post('/transaction/broadcast', function(req,res){
+    const newTransaction = coin.createNewTranscation(req.body.amount,req.body.sender,req.body.recipient);
+    coin.addTransactionToPendingTransations(newTransaction);
+   
+    const requestPromises = [];
+    coin.networkNodes.forEach(networkNodeUrl =>{
+        const requestOptions = {
+            url: networkNodeUrl + '/transaction',
+            method: 'POST',
+            body: newTransaction,
+            json: true
+        };
+        requestPromises.push(rp(requestOptions));
+    });
+    Promise.all(requestPromises)
+    .then(data => {
+        res.json({note: ' Transaction created and broadcast successfully.'})
+    });
+});
+
 app.get('/mine', function (req, res) {
     const lastBlock = coin.getLastBlock();
     const previousBlockHash = lastBlock['hash'];
