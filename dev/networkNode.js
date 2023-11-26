@@ -56,9 +56,8 @@ app.get('/mine', function (req, res) {
     const blockHash = coin.hashBlock(previousBlockHash,currentBlockData,nonce);
 
     const newBlock = coin.createNewBlock(nonce,previousBlockHash,blockHash);
-    
+    const requestPromises=[];
     coin.networkNodes.forEach(networkNodeUrl=>{
-        const requestPromises=[];
         const requestOptions = {
             url: networkNodeUrl + '/receive-new-block',
             method: 'POST',
@@ -68,10 +67,10 @@ app.get('/mine', function (req, res) {
         requestPromises.push(rp(requestOptions));
     });
 
-    Promise.all(requestPromise)
+    Promise.all(requestPromises)
     .then(data =>{
         const requestOptions = {
-            url: coin.currentNodeUrl = '/transaction/broadcast',
+            url: coin.currentNodeUrl + '/transaction/broadcast',
             method: 'POST',
             body:{
                 amount:12.5,
@@ -104,7 +103,7 @@ app.post('/receive-new-block', function(req,res){
             newBlock: newBlock
         });
     }else{
-        res.jason({
+        res.json({
             note:'New blcok rejected.',
             newBlock:newBlock
         });
