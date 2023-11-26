@@ -172,7 +172,7 @@ app.get('/consensus',function(req,res){
     coin.networkNodes.forEach(networkNodeUrl => {
         const requestOptions = {
             url: networkNodeUrl+'/blockchain',
-            method:get,
+            method:'GET',
             json:true
         };
         requestPromise.push(rp(requestOptions));
